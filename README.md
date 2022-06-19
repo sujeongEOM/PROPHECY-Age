@@ -33,11 +33,11 @@ Goal : Predicting age using EKG waveform data
 - 500Hz / 10 sec / 12 leads
 - shape = (5000, 12)
 - Use only 8 leads (I, II, V1-V6) as other 4 leads are computed using these 8 leads
-- 0 padding on top 120 rows
+- 0 padding on top 60, bottom 60 rows
 - final shape as input = (5120, 12)
 
 
 ## 3. Model Train, Test
-- Data Generator
-- 1D CNN model (Ribeiro, Attia etc.)
+- Custom dataset with dataloader
+- 1D CNN model (Ribeiro, Attia etc.) combined with Deep Ensembles (which has mu, sigma values at the last "Gaussian Layer")
 - Test values : MSE, MAE, r2 score
