@@ -7,24 +7,19 @@ from dataset import CustomDataset
 import torch.optim as optim
 import numpy as np
 
-'''
-# Ribeiro
-def compute_loss(ages, pred_ages, weights):
-    diff = ages.flatten() - pred_ages.flatten()
-    loss = torch.sum(weights.flatten() * diff * diff)
-    return loss
-'''
-# to avoid inf in pred_sigma_pos
-#https://stackoverflow.com/questions/60903821/how-to-prevent-inf-while-working-with-exponential
-def log1pexp(x):
-    # more stable version of log(1 + exp(x))
-    return torch.where(x < 50, torch.log1p(torch.exp(x)), x)
 
+# Ribeiro
+def compute_loss(ages, pred_ages):
+    diff = ages.flatten() - pred_ages.flatten()
+    loss = torch.sum(diff * diff)
+    return loss
+
+'''
 # Deep Ensembles
 def compute_loss(ages, pred_ages, pred_sigma):
   gauss_loss = torch.sum(0.5*torch.log(pred_sigma.flatten()) + 0.5*torch.div(torch.square(ages - pred_ages.flatten()), pred_sigma.flatten())) + 1e-6
   return gauss_loss
-
+'''
 
 '''
 # Ribeiro
@@ -54,10 +49,10 @@ def train(ep, dataload):
         model.zero_grad()
         # Send to device
         # Forward pass
-        pred_ages, pred_sigma = model(traces) #pred_ages [128, 1], pred_sigma [128,1]
+        pred_ages = model(traces) #pred_ages [128, 1]
         #print(pred_ages, pred_ages.shape, type(pred_ages))
         #print(pred_sigma, pred_sigma.shape, type(pred_sigma))
-        loss = compute_loss(ages, pred_ages, pred_sigma)
+        loss = compute_loss(ages, pred_ages)
         #print(loss, loss.shape)
         #print(loss.shape)  
         # Backward pass
@@ -87,8 +82,8 @@ def eval(ep, dataload):
         traces, ages = traces.to(device), ages.to(device)
         with torch.no_grad():
             # Forward pass
-            pred_ages, pred_sigma = model(traces)
-            loss = compute_loss(ages, pred_ages, pred_sigma)
+            pred_ages = model(traces)
+            loss = compute_loss(ages, pred_ages)
             # Update outputs
             bs = len(traces)
             # Update ids

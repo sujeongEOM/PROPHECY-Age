@@ -7,4 +7,5 @@ __pycache__/
 *.csv
 *.pickle
 *.h5
+*.npy
 UKBiobank_Parser.py

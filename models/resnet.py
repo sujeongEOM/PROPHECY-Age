@@ -82,24 +82,24 @@ def log1pexp(x):
     return torch.where(x < 50, torch.log1p(torch.exp(x)), x)
     
 class GaussianLayer(nn.Module):
-  def __init__(self, n_filters_in, n_filters_out): #(5120, 1)
-    super(GaussianLayer, self).__init__()
-    self.n_filters_in = n_filters_in
-    self.n_filters_out = n_filters_out
-    self.w_mu = nn.Parameter(torch.ones(self.n_filters_in, self.n_filters_out))
-    self.w_sigma = nn.Parameter(torch.ones(self.n_filters_in, self.n_filters_out))
-    self.b_mu = nn.Parameter(torch.ones(1, self.n_filters_out))
-    self.b_sigma = nn.Parameter(torch.ones(1, self.n_filters_out))
-    self.layer_mu = nn.Linear(self.n_filters_in, self.n_filters_in) #(5120, 5120)
-    self.layer_sigma = nn.Linear(self.n_filters_in, self.n_filters_in) #(5120, 5120)
+    def __init__(self, n_filters_in, n_filters_out): #(5120, 1)
+        super(GaussianLayer, self).__init__()
+        self.n_filters_in = n_filters_in
+        self.n_filters_out = n_filters_out
+        self.w_mu = nn.Parameter(torch.ones(self.n_filters_in, self.n_filters_out))
+        self.w_sigma = nn.Parameter(torch.ones(self.n_filters_in, self.n_filters_out))
+        self.b_mu = nn.Parameter(torch.ones(1, self.n_filters_out))
+        self.b_sigma = nn.Parameter(torch.ones(1, self.n_filters_out))
+        self.layer_mu = nn.Linear(self.n_filters_in, self.n_filters_in) #(5120, 5120)
+        self.layer_sigma = nn.Linear(self.n_filters_in, self.n_filters_in) #(5120, 5120)
 
-  def forward(self,x):
-    mu_pred = self.layer_mu(x)
-    sigma_pred = self.layer_sigma(x)
-    mu_pred = torch.matmul(mu_pred, self.w_mu) + self.b_mu #(batch_size, 1)
-    sigma_pred = torch.matmul(sigma_pred, self.w_sigma) + self.b_sigma #(batch_size, 1)
-    sigma_pred_pos = (log1pexp(sigma_pred)) + 1e-06
-    return [mu_pred, sigma_pred_pos]
+    def forward(self,x):
+        mu_pred = self.layer_mu(x)
+        sigma_pred = self.layer_sigma(x)
+        mu_pred = torch.matmul(mu_pred, self.w_mu) + self.b_mu #(batch_size, 1)
+        sigma_pred = torch.matmul(sigma_pred, self.w_sigma) + self.b_sigma #(batch_size, 1)
+        sigma_pred_pos = (log1pexp(sigma_pred)) + 1e-06
+        return [mu_pred, sigma_pred_pos]
     
 
 class ResNet1d(nn.Module):
