@@ -2,10 +2,13 @@
 
 __pycache__/
 .ipynb_checkpoints/
+model_hx/
+wandb/
 
 *.ipynb
 *.csv
 *.pickle
 *.h5
 *.npy
+
 UKBiobank_Parser.py

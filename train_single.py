@@ -2,8 +2,8 @@ import json
 import torch
 import os
 from tqdm import tqdm
-from resnet import ResNet1d
-from dataset import CustomDataset
+from models.resnet_original import ResNet1d
+from data.CustomDataset import CustomDataset
 import torch.optim as optim
 import numpy as np
 
@@ -157,9 +157,9 @@ if __name__ == "__main__":
     parser.add_argument('path_to_train_csv',
                         help='path to train csv file containing attributes.') #220616_Train_Age-fname.csv
     parser.add_argument('path_to_valid_traces',
-                        help='path to valid file containing ECG traces') #train_np.npy
+                        help='path to valid file containing ECG traces') #valid_np.npy
     parser.add_argument('path_to_valid_csv',
-                        help='path to valid csv file containing attributes.') #220616_Train_Age-fname.csv
+                        help='path to valid csv file containing attributes.') #220616_Valid_Age-fname.csv
     args, unk = parser.parse_known_args()
     # Check for unknown options
     if unk:
@@ -168,10 +168,11 @@ if __name__ == "__main__":
     torch.manual_seed(args.seed)
     print(args)
 
-    wandb.login
+    #wandb.login #should login before run
     # wandb config
     wandb.init(
-        project="PROPHECY-Age", entitiy="sjeom", 
+        project="PROPHECY-Age", entity="sjeom", 
+        name=args.model_name, 
         config={
             "model_name": args.model_name, 
             "epochs": args.epochs, 
@@ -258,7 +259,7 @@ if __name__ == "__main__":
                         'model': model.state_dict(),
                         'valid_loss': valid_loss,
                         'optimizer': optimizer.state_dict()},
-                       os.path.join(folder, 'model.pth'))
+                        os.path.join(folder, f'{config.model_name}_model.pth'))
             # Update best validation loss
             best_loss = valid_loss
         # Get learning rate
