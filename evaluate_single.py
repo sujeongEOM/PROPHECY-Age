@@ -20,7 +20,7 @@ if __name__ == "__main__":
                         help='path to csv containing age')
     parser.add_argument('path_to_test_traces', 
                         help='path to numpy containing ECG traces')
-    parser.add_argument('dataset', type=str, 
+    parser.add_argument('dataset_name', type=str, 
                         help='dataset being tested')
     parser.add_argument('pred_folder', type=str, default="model_hx/predicted-ages/"
                         help='folder to save predicted ages')
@@ -90,4 +90,4 @@ if __name__ == "__main__":
         predicted_age[start:end] = y_pred.detach().cpu().numpy().flatten()
     # Save predictions
     df = pd.DataFrame({'fname': test_fname, 'predicted_age': predicted_age})
-    df.to_csv(os.path.join(args.pred_folder, f'{args.model_name}_{args.dataset}_predicted-age.csv'), index=False)
+    df.to_csv(os.path.join(args.pred_folder, f'{args.model_name}_{args.dataset_name}_predicted-age.csv'), index=False)
