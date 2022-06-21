@@ -6,7 +6,7 @@ __pycache__/
 wandb/
 
 *.ipynb
-*.csv
+#*.csv
 *.pickle
 *.h5
 *.npy
