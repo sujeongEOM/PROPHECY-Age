@@ -2,7 +2,7 @@
 
 __pycache__/
 .ipynb_checkpoints/
-model_hx/
+#model_hx/
 wandb/
 
 *.ipynb

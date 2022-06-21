@@ -152,14 +152,14 @@ if __name__ == "__main__":
 #                             'The rest is for training')
     parser.add_argument('model_name',
                         help='name of the model')
-    parser.add_argument('path_to_train_traces',
-                        help='path to train file containing ECG traces') #train_np.npy
     parser.add_argument('path_to_train_csv',
                         help='path to train csv file containing attributes.') #220616_Train_Age-fname.csv
-    parser.add_argument('path_to_valid_traces',
-                        help='path to valid file containing ECG traces') #valid_np.npy
+    parser.add_argument('path_to_train_traces',
+                        help='path to train file containing ECG traces') #train_np.npy
     parser.add_argument('path_to_valid_csv',
                         help='path to valid csv file containing attributes.') #220616_Valid_Age-fname.csv
+    parser.add_argument('path_to_valid_traces',
+                        help='path to valid file containing ECG traces') #valid_np.npy
     args, unk = parser.parse_known_args()
     # Check for unknown options
     if unk:
@@ -210,7 +210,7 @@ if __name__ == "__main__":
     # Get csv data
     valid_df = pd.read_csv(args.path_to_valid_csv)
     valid_ages = valid_df[args.age_col]
-    # Get h5 data
+    # Get numpy data
     valid_traces = np.load(args.path_to_valid_traces, "r+")
     # weights
     #valid_weights = compute_weights(valid_ages)

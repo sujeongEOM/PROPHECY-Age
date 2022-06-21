@@ -39,12 +39,15 @@ Goal : Predicting age using EKG waveform data
 
 ## 3. Model Train, Test
 - Custom dataset with dataloader (data related in folder __**data**__)
-- 1D CNN model (Ribeiro et al.) combined with Deep Ensembles (which has mu, sigma values at the last "Gaussian Layer")  
+- 1D CNN Residual block neural network (Ribeiro et al.)  
 Code from [antonior92/ecg-age-prediction](https://github.com/antonior92/ecg-age-prediction) repository
-  
-    a. In order to train model, type below into terminal. 
-    > python train.py PATH_TO_TRAIN_TRACES PATH_TO_TRAIN_CSV PATH_TO_VALID_TRACES PATH_TO_VALID_CSV
 
-    b. Testing (evaluation) code still on editing!
+    a. Original network train
+     > python train_single.py model_name PATH_TO_TRAIN_TRACES PATH_TO_TRAIN_CSV PATH_TO_VALID_TRACES PATH_TO_VALID_CSV
+
+    b. Deep Ensembles combined network train (which has mu, sigma values at the last "Gaussian Layer") (on progress)
+    > python train_de.py model_name PATH_TO_TRAIN_TRACES PATH_TO_TRAIN_CSV PATH_TO_VALID_TRACES PATH_TO_VALID_CSV
+
+    c. Testing (evaluation) code still on editing!
       
 - Test values : MSE, MAE, r2 score
