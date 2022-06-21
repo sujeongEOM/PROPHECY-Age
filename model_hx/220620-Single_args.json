@@ -1,0 +1,35 @@
+{
+	"epochs": 50,
+	"seed": 42,
+	"sample_freq": 500,
+	"seq_length": 5120,
+	"batch_size": 128,
+	"lr": 0.001,
+	"patience": 7,
+	"min_lr": 1e-07,
+	"lr_factor": 0.1,
+	"net_filter_size": [
+		64,
+		128,
+		196,
+		256,
+		320
+	],
+	"net_seq_lengh": [
+		5120,
+		1280,
+		320,
+		80,
+		20
+	],
+	"dropout_rate": 0.8,
+	"kernel_size": 17,
+	"folder": "model_hx/",
+	"age_col": "RestingECG.PatientDemographics.PatientAge",
+	"cuda": true,
+	"model_name": "220620-Single",
+	"path_to_train_traces": "/home/ubuntu/dr-you-ecg-20220420_mount/220616_Age_Dataset_sjeom/220616_train-np.npy",
+	"path_to_train_csv": "/home/ubuntu/dr-you-ecg-20220420_mount/220616_Age_Dataset_sjeom/220616_Train_Age-fname.csv",
+	"path_to_valid_traces": "/home/ubuntu/dr-you-ecg-20220420_mount/220616_Age_Dataset_sjeom/220616_valid-np.npy",
+	"path_to_valid_csv": "/home/ubuntu/dr-you-ecg-20220420_mount/220616_Age_Dataset_sjeom/220616_Valid_Age-fname.csv"
+}

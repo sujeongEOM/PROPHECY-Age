@@ -1,8 +1,14 @@
-/__pycache__/
-/.ipynb_checkpoints/
+#https://velog.io/@psk84/.gitignore-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
+
+__pycache__/
+.ipynb_checkpoints/
+#model_hx/
+wandb/
 
 *.ipynb
-*.csv
+#*.csv
 *.pickle
 *.h5
+*.npy
+
 UKBiobank_Parser.py
