@@ -12,17 +12,9 @@ import pandas as pd
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('model_path', default="model_hx/"
+    parser.add_argument('--model_path', default="model_hx/", 
                         help='folder containing model')
-    parser.add_argument('model_name', 
-                        help='name of the model')
-    parser.add_argument('path_to_test_csv',  
-                        help='path to csv containing age')
-    parser.add_argument('path_to_test_traces', 
-                        help='path to numpy containing ECG traces')
-    parser.add_argument('dataset_name', type=str, 
-                        help='dataset being tested')
-    parser.add_argument('pred_folder', type=str, default="model_hx/predicted-ages/"
+    parser.add_argument('--pred_folder', type=str, default="model_hx/predicted-ages/", 
                         help='folder to save predicted ages')
     parser.add_argument('--age_col', default='RestingECG.PatientDemographics.PatientAge',
                         help='column with the age in csv file.')
@@ -36,12 +28,25 @@ if __name__ == "__main__":
 #                         help='traces dataset in the hdf5 file.')
 #    parser.add_argument('--ids_dset',
 #                         help='ids dataset in the hdf5 file.')
+    parser.add_argument('model_name', 
+                        help='name of the model')
+    parser.add_argument('path_to_test_csv',  
+                        help='path to csv containing age')
+    parser.add_argument('path_to_test_traces', 
+                        help='path to numpy containing ECG traces')
+    parser.add_argument('dataset_name', type=str, 
+                        help='dataset being tested')
     args, unk = parser.parse_known_args()
     # Check for unknown options
     if unk:
         warn("Unknown arguments:" + str(unk) + ".")
+
+    if not os.path.exists(args.pred_folder):
+        os.makedirs(args.pred_folder)
+
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     print(device)
+
     # Get checkpoint
     ckpt = torch.load(os.path.join(args.model_path, f'{args.model_name}_model.pth'), map_location=lambda storage, loc: storage)
     # Get config
@@ -64,7 +69,8 @@ if __name__ == "__main__":
     test_fname = test_df[args.fname_col]
 
     test_traces = np.load(args.path_to_test_traces, "r+")
-    n_total = len(traces)
+    n_total = len(test_traces)
+    print(f'traces shape: {test_traces.shape}')
     '''
     if args.ids_dset:
         ids = ff[args.ids_dset]
@@ -75,7 +81,7 @@ if __name__ == "__main__":
     #predicted_age = np.zeros((n_total,))
     # Evaluate on test data
     model.eval()
-    n_total, n_samples, n_leads = traces.shape
+    n_total, n_samples, n_leads = test_traces.shape
     n_batches = int(np.ceil(n_total/args.batch_size))
     # Compute gradients
     predicted_age = np.zeros((n_total,))
@@ -84,7 +90,7 @@ if __name__ == "__main__":
         start = end
         end = min((i + 1) * args.batch_size, n_total)
         with torch.no_grad():
-            x = torch.tensor(traces[start:end, :, :]).transpose(-1, -2)
+            x = torch.tensor(test_traces[start:end, :, :]).transpose(-1, -2) #(batch_size, 5120, 8)
             x = x.to(device, dtype=torch.float32)
             y_pred = model(x)
         predicted_age[start:end] = y_pred.detach().cpu().numpy().flatten()
