@@ -2,6 +2,7 @@
 
 __pycache__/
 .ipynb_checkpoints/
+IntTest_unique-id_split/
 #model_hx/
 wandb/
 
@@ -12,3 +13,7 @@ wandb/
 *.npy
 
 UKBiobank_Parser.py
+IntTest-Checkup_unique_id.xlsx
+IntTest_unique_id.xlsx
+220620-Single-2_IntTest-Checkup_Results_BirthDeath_220622.csv
+220620-Sinlg-2_IntTest_Results_BirthDeath_220622.csv
